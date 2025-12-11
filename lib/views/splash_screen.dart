@@ -1,8 +1,9 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:pf_project/views/login_screen.dart';
+import 'package:pf_project/views/signin_screen.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
   @override
   State<SplashScreen> createState() {
     return _SplashScreenState();
@@ -12,9 +13,11 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   void navigate() async {
     await Future.delayed(Duration(seconds: 6));
+    if (!mounted) return;
+
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
+      MaterialPageRoute(builder: (context) => SignInScreen()),
     );
   }
 
@@ -52,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      "Secure Vault",
+                      "Paynix",
                       style: TextStyle(
                         fontSize: 35,
                         fontWeight: FontWeight.w700,
