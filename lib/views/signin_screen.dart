@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:pf_project/views/helper%20%20widgets/custom_widgets.dart';
+import 'package:pf_project/views/homepage.dart';
 import 'package:pf_project/views/signup_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -160,9 +161,15 @@ class _SignInScreen extends State<SignInScreen> {
                                 style: TextStyle(color: Colors.black),
                               ),
                               onPressed: () {
-                                if (!_formKey.currentState!.validate()) {
-                                  return;
-                                }
+                                // if (!_formKey.currentState!.validate()) {
+                                //   return;
+                                // }
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Homepage(),
+                                  ),
+                                );
                               },
                             ),
                           ),

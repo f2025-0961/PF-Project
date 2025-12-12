@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pf_project/viewmodels/theme_viewmodel.dart';
+import 'package:pf_project/views/SignIn_screen.dart';
+import 'package:pf_project/views/about_app.dart';
+import 'package:pf_project/views/contact_us.dart';
+import 'package:pf_project/views/privacy_policies.dart';
+import 'package:provider/provider.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -11,9 +17,336 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(65),
+        child: AppBar(
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 10, top: 8),
+            child: CircleAvatar(backgroundImage: AssetImage("assets/logo.png")),
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xff136a8a), Color(0xff57C785)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+          title: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Text(
+              "Paynix",
+              style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: EndDrawerButton(color: Colors.black),
+            ),
+          ],
+        ),
+      ),
+      endDrawer: endDrawer(context),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(25),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xff136a8a), Color(0xff57C785)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(28),
+              ),
+              padding: EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Available Balance", style: TextStyle(fontSize: 16)),
+                  SizedBox(height: 8),
+                  Text(
+                    "PKR 0,000",
+                    style: TextStyle(fontSize: 38, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    "Last updated • Just now",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 25),
+            Text(
+              "Quick Actions",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: 15),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                actionCard(Icons.add, "Add Money", Colors.green),
+                actionCard(Icons.remove, "Withdraw", Colors.red),
+                actionCard(Icons.swap_horiz, "Transfer", Colors.blue),
+              ],
+            ),
+
+            SizedBox(height: 35),
+            Text(
+              "Account Overview",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: 15),
+            Row(
+              children: [
+                Expanded(
+                  child: smallInfoCard(
+                    "Deposits",
+                    "PKR 0",
+                    Icons.arrow_upward,
+                    Colors.green,
+                  ),
+                ),
+                SizedBox(width: 12),
+                Expanded(
+                  child: smallInfoCard(
+                    "Withdrawals",
+                    "PKR 0",
+                    Icons.arrow_downward,
+                    Colors.red,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Recent Transactions",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: 15),
+            transactionItem(
+              "Added Money",
+              "+5000",
+              "11 Jan 2025",
+              Colors.green,
+            ),
+            transactionItem("Withdrawal", "-1200", "10 Jan 2025", Colors.red),
+            transactionItem("Transfer", "-2000", "09 Jan 2025", Colors.blue),
+            SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
+}
+
+Widget endDrawer(BuildContext context) {
+  double widthx = MediaQuery.of(context).size.width;
+  double heightx = MediaQuery.of(context).size.height;
+  return Drawer(
+    width: widthx * 0.3,
+    child: ListView(
+      children: [
+        SizedBox(
+          height: 200,
+          width: widthx * 0.3,
+
+          child: Image.asset('assets/image.png', fit: BoxFit.cover),
+        ),
+        SizedBox(height: heightx * 0.01),
+        SizedBox(
+          height: heightx * 0.27,
+          child: Column(
+            children: [
+              Text(
+                'Paynix',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 25),
+              ),
+              SizedBox(height: heightx * 0.01),
+              ListTile(
+                leading: CircleAvatar(child: Icon(Icons.person)),
+                title: Text(
+                  'Username',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+                subtitle: Text(
+                  'Mr.Aftab',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+              ),
+              ListTile(
+                leading: CircleAvatar(child: Icon(Icons.email)),
+                title: Text(
+                  'Email',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+                subtitle: Text(
+                  'f2025-0961@bnu.edu.pk',
+                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Divider(),
+        Consumer<ThemeViewmodel>(
+          builder: (context, val, child) => ListTile(
+            trailing: Transform.scale(
+              scale: 0.75,
+              child: Switch.adaptive(
+                value: val.isDark,
+                onChanged: (value) {
+                  val.updateTheme(value);
+                },
+              ),
+            ),
+            leading: Icon(Icons.dark_mode, size: 20),
+            title: Text(
+              'Dark Theme',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            ),
+          ),
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+            );
+          },
+          leading: Icon(Icons.privacy_tip, size: 20),
+          title: Text(
+            'Privacy Policies',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AboutAppPage()),
+            );
+          },
+          leading: Icon(Icons.info, size: 20),
+          title: Text(
+            'About App',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ContactUsPage()),
+            );
+          },
+          leading: Icon(Icons.contact_mail, size: 20),
+          title: Text(
+            'Contact Us',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
+        ),
+        ListTile(
+          leading: Icon(Icons.logout, color: Colors.red),
+          title: Text(
+            'Logout',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: Colors.deepPurpleAccent,
+            ),
+          ),
+          onTap: () {
+            Provider.of<ThemeViewmodel>(context, listen: false).setLightMode();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => SignInScreen()),
+            );
+          },
+        ),
+      ],
+    ),
+  );
+}
+
+Widget actionCard(IconData icon, String label, Color color) {
+  return Card(
+    elevation: 2,
+    child: Container(
+      width: 100,
+      padding: EdgeInsets.symmetric(vertical: 16),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(14)),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 30),
+          SizedBox(height: 6),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget smallInfoCard(
+  String title,
+  String value,
+  IconData icon,
+  Color iconColor,
+) {
+  return Card(
+    elevation: 3,
+    child: Container(
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: iconColor, size: 28),
+          SizedBox(height: 10),
+          Text(
+            title,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
+          SizedBox(height: 5),
+          Text(
+            value,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget transactionItem(String title, String amount, String date, Color color) {
+  return Card(
+    elevation: 2,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+    child: ListTile(
+      leading: CircleAvatar(
+        backgroundColor: color.withOpacity(0.2),
+        child: Icon(Icons.account_balance_wallet, color: color),
+      ),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w600)),
+      subtitle: Text(date),
+      trailing: Text(
+        amount,
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
+    ),
+  );
 }

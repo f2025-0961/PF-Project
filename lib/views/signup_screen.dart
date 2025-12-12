@@ -146,21 +146,21 @@ class _SignUpScreen extends State<SignUpScreen> {
                                 if (p0.length < 6) {
                                   return 'Password must be at least 6 characters';
                                 }
-
+    
                                 return null;
                               },
                             ),
                             SizedBox(height: heightX * 0.025),
                             form.signInTf(
                               focus: confirmPasswordFocus,
-
+    
                               taction: TextInputAction.next,
                               onsubmitted: (p0) {
                                 FocusScope.of(
                                   context,
                                 ).requestFocus(buttonFocus);
                               },
-
+    
                               obsecure: reobsecure,
                               controller: confirmPasswordController,
                               icon: IconButton(
@@ -213,7 +213,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                                 ),
                               ],
                             ),
-
+    
                             SizedBox(height: heightX * 0.025),
                             SizedBox(
                               width: widthX * 0.2,
