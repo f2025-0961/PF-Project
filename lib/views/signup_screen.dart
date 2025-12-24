@@ -235,7 +235,7 @@ class _SignUpScreen extends State<SignUpScreen> {
                                   }
                                   signup(
                                     nameContoller.text,
-                                    emailController.text,
+                                    emailController.text.trim(),
                                     passwordController.text,
                                     confirmPasswordController.text,
                                   );
@@ -263,7 +263,7 @@ class _SignUpScreen extends State<SignUpScreen> {
     String confirmPassword,
   ) async {
     try {
-      final result = await Process.run('auth.exe', [
+      final result = await Process.run('program.exe', [
         'signUp',
         userName,
         email,
@@ -295,7 +295,7 @@ class _SignUpScreen extends State<SignUpScreen> {
         case 3:
           {
             setState(() {
-              message = "Invalid email or password!";
+              message = "Password does not matched!";
             });
           }
           break;

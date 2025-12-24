@@ -169,8 +169,8 @@ class _SignInScreen extends State<SignInScreen> {
                                   return;
                                 }
                                 signin(
-                                  emailController.text,
-                                  passwordController.text,
+                                  emailController.text.trim(),
+                                  passwordController.text.trim(),
                                 );
                               },
                             ),
@@ -190,7 +190,7 @@ class _SignInScreen extends State<SignInScreen> {
 
   Future<void> signin(String email, String password) async {
     try {
-      final result = await Process.run('auth.exe', [
+      final result = await Process.run('program.exe', [
         'signIn',
         email,
         password,
@@ -214,7 +214,7 @@ class _SignInScreen extends State<SignInScreen> {
         case 2:
           {
             setState(() {
-              message = "Invalid email or password!"; 
+              message = "User not found!";
             });
           }
           break;
@@ -222,20 +222,6 @@ class _SignInScreen extends State<SignInScreen> {
           {
             setState(() {
               message = "FOE-Unexpected Error!"; //file opening error
-            });
-          }
-          break;
-        case 3:
-          {
-            setState(() {
-              message = "Invalid email or password!";
-            });
-          }
-          break;
-        case 4:
-          {
-            setState(() {
-              message = "Account already exists!";
             });
           }
           break;
