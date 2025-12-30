@@ -1,3 +1,1 @@
-1|aftab|aftab@gmail.com|123456
-2|Aftab|aftab@gmail.com|123456
-3|asd|a@email.com|23
+1|Ali|aftab@gmail.com|123456
