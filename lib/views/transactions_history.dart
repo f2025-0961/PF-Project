@@ -91,7 +91,7 @@ Widget transactionItem(String title, String amount, String date, Color color) {
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
     child: ListTile(
       leading: CircleAvatar(
-        backgroundColor: color.withOpacity(0.2),
+        backgroundColor: color.withValues(alpha: 200),
         child: Icon(Icons.account_balance_wallet, color: color),
       ),
       title: Text(title, style: TextStyle(fontWeight: FontWeight.w600)),

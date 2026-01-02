@@ -1077,7 +1077,7 @@ class _HomepageState extends State<Homepage> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: color.withOpacity(0.2),
+          backgroundColor: color.withValues(alpha: 200),
           child: Icon(Icons.account_balance_wallet, color: color),
         ),
         title: Text(title, style: TextStyle(fontWeight: FontWeight.w600)),
@@ -1105,6 +1105,7 @@ class _HomepageState extends State<Homepage> {
       switch (decide) {
         case 0:
           {
+            if (!mounted) return;
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => SignInScreen()),
@@ -1133,6 +1134,7 @@ class _HomepageState extends State<Homepage> {
         case -1:
           {
             debugPrint("file opening error!");
+            if (!mounted) return;
             Utils().flutterToast("Error in fetching user details!", context);
           }
           break;
@@ -1155,9 +1157,11 @@ class _HomepageState extends State<Homepage> {
               userID.toString(),
             ], workingDirectory: Directory.current.path);
             int decide = details.exitCode;
+            debugPrint("decide :$decide");
             switch (decide) {
               case -1:
                 {
+                  if (!mounted) return;
                   Utils().flutterToast(
                     "Error in fetching user details!",
                     context,
@@ -1170,6 +1174,7 @@ class _HomepageState extends State<Homepage> {
                   debugPrint(
                     "unexpected error in fetching details from users file!",
                   );
+                  if (!mounted) return;
                   Utils().flutterToast(
                     "Error in fetching user details!",
                     context,
@@ -1181,9 +1186,13 @@ class _HomepageState extends State<Homepage> {
                   debugPrint("file opening error! -4");
                 }
                 break;
+              case 0:
+                {
+                  debugPrint("Get user info succesfully!");
+                }
               default:
                 {
-                  debugPrint("unexpected error!");
+                  debugPrint("unexpected error  ...!");
                 }
                 break;
             }

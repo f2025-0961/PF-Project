@@ -16,7 +16,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    check_user();
+    checkUser();
     super.initState();
   }
 
@@ -103,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Future<void> check_user() async {
+  Future<void> checkUser() async {
     await Future.delayed(Duration(seconds: 2));
     try {
       final result = await Process.run(
@@ -115,6 +115,7 @@ class _SplashScreenState extends State<SplashScreen> {
       switch (decide) {
         case 0:
           {
+            if (!mounted) return;
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => Homepage()),
@@ -123,6 +124,7 @@ class _SplashScreenState extends State<SplashScreen> {
           break;
         case 1:
           {
+            if (!mounted) return;
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => SignInScreen()),

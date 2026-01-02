@@ -283,6 +283,7 @@ class _SignUpScreen extends State<SignUpScreen> {
       switch (decide) {
         case 0:
           {
+            if (!mounted) return;
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => SignInScreen()),
@@ -328,6 +329,7 @@ class _SignUpScreen extends State<SignUpScreen> {
             });
           }
       }
+      if (!mounted) return;
       Utils().flutterToast(message.toString(), context);
     } catch (e) {
       debugPrint("Process error: $e");
