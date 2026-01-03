@@ -2,13 +2,14 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <iomanip>
 using namespace std;
 
 int main(int argument, char *arg[])
 {
-    double balanceToAdd = stod(arg[3]);
     if (argument == 4)
     {
+        double balanceToAdd = stod(arg[3]);
         if (balanceToAdd > 100000000)
         {
             return -9; // out of limit
@@ -17,7 +18,6 @@ int main(int argument, char *arg[])
         bool pkrBalanceUpdate = false;
         int userID = stoi(arg[1]);
         int balanceType = stoi(arg[2]);
-
         if (balanceType == 1)
         {
             pkrBalanceUpdate = true;
@@ -28,6 +28,11 @@ int main(int argument, char *arg[])
         if (walletFile.is_open())
         {
             string line;
+            if (line.empty())
+            {
+                return 1; // empty wallet file
+            }
+
             while (getline(walletFile, line))
             {
                 linesV.push_back(line);
@@ -49,7 +54,9 @@ int main(int argument, char *arg[])
                     {
                         totalUsdBalance = totalUsdBalance + balanceToAdd;
                     }
-                    x = to_string(uid) + "|" + to_string(totalPkrBalance) + "|" + to_string(totalUsdBalance);
+                    ostringstream oss;
+                    oss << uid << '|' << fixed << setprecision(1) << totalPkrBalance << '|' << setprecision(1) << totalUsdBalance;
+                    x = oss.str();
                     break;
                 }
             }
@@ -78,6 +85,4 @@ int main(int argument, char *arg[])
     {
         return -6; // no of arguments is not correct
     }
-
-    return 0;
 }
