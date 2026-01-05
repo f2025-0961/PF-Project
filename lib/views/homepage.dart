@@ -1247,6 +1247,11 @@ class _HomepageState extends State<Homepage> {
                         balType.toString(),
                         swapAmountController.text.trim().trim(),
                       );
+                      await exchangeHistory(
+                        userID.toString(),
+                        selectedExchangeCurrency!,
+                        swapAmountController.text,
+                      );
                       await currentUser();
                       setState(() {
                         selectedExchangeCurrency = null;
@@ -2115,6 +2120,54 @@ class _HomepageState extends State<Homepage> {
         return;
       }
       debugPrint("Error in  add balance history function cpp: $e");
+      Utils().flutterToast("Unexpected error while processing!", context);
+    }
+  }
+
+  Future<void> exchangeHistory(
+    String uid,
+    String toBeExchangedCurrency,
+    String exchangeamount,
+  ) async {
+    try {
+      final history = await Process.run("exchangeHistory.exe", [
+        uid,
+        toBeExchangedCurrency,
+        exchangeamount,
+      ], workingDirectory: Directory.current.path);
+      int decide = history.exitCode;
+      switch (decide) {
+        case 0:
+          {
+            debugPrint("Added exchange history sucessfully!");
+            await Future.delayed(Duration(seconds: 1));
+            await currentUser();
+          }
+          break;
+        case -1:
+          {
+            if (!mounted) {
+              return;
+            }
+            Utils().flutterToast("Internal error occured!", context);
+            debugPrint("file opening error in exchange history");
+          }
+          break;
+        case -6:
+          {
+            debugPrint("incorrect arguments in exhchange history!");
+          }
+        default:
+          {
+            debugPrint("Error in exchange history function cpp");
+            Utils().flutterToast("Unexpected error", context);
+          }
+      }
+    } catch (e) {
+      if (!mounted) {
+        return;
+      }
+      debugPrint("Error in exchange history history function cpp: $e");
       Utils().flutterToast("Unexpected error while processing!", context);
     }
   }
