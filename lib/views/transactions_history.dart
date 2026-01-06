@@ -19,6 +19,7 @@ class _TransactionsHistoryState extends State<TransactionsHistory> {
     // displayAddBalanceHistory();
     // displayExchangeHistory();
     // displayTransferHistory();
+    displayBillHistory();
   }
 
   @override
@@ -70,10 +71,10 @@ class _TransactionsHistoryState extends State<TransactionsHistory> {
                     itemBuilder: (context, index) {
                       return transactionItem(
                         transactions[index]["action"],
-                        transactions[index]["currency"],
-                        transactions[index]["method"],
-                        transactions[index]["accountNum"],
+                        transactions[index]["billType"],
+                        transactions[index]["serviceProvider"],
                         transactions[index]["name"],
+                        transactions[index]["consumerNo"],
                         transactions[index]["amount"],
                         transactions[index]["time"],
                         transactions[index]["color"],
@@ -197,7 +198,7 @@ class _TransactionsHistoryState extends State<TransactionsHistory> {
 
   Future<void> displayBillHistory() async {
     try {
-      final result = await Process.run("displayTransferHistory.exe", [
+      final result = await Process.run("displayBillHistory.exe", [
         widget.userID.trim(),
       ], workingDirectory: Directory.current.path);
 
@@ -214,21 +215,21 @@ class _TransactionsHistoryState extends State<TransactionsHistory> {
         if (parts.length < 7) continue;
 
         temp.add({
-          "action": "Transferred Money",
-          "currency": parts[1],
-          "method": parts[2],
-          "accountNum": parts[3],
-          "name": parts[4],
+          "action": "Bill Payment",
+          "billType": parts[1],
+          "serviceProvider": parts[2],
+          "name": parts[3],
+          "consumerNo": parts[4],
           "amount": parts[5],
           "time": parts[6],
-          "color": Colors.red,
+          "color": Color(0xFF546E7A),
         });
       }
       setState(() {
         transactions = temp;
       });
     } catch (e) {
-      debugPrint("Error displaying transfer money history: $e");
+      debugPrint("Error displaying bill payments history: $e");
     }
   }
 }
@@ -315,12 +316,57 @@ class _TransactionsHistoryState extends State<TransactionsHistory> {
 //   );
 // }
 
+// Widget transactionItem(
+//   String title,
+//   String currency,
+//   String method,
+//   String accountNum,
+//   String name,
+//   String amount,
+//   String date,
+//   Color color,
+// ) {
+//   return Card(
+//     elevation: 2,
+//     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+//     child: ListTile(
+//       leading: CircleAvatar(
+//         backgroundColor: color.withValues(alpha: 200),
+//         child: Icon(Icons.account_balance_wallet, color: color),
+//       ),
+//       title: Text(title, style: TextStyle(fontWeight: FontWeight.w600)),
+//       subtitle: Row(
+//         children: [
+//           Text("Currency: $currency"),
+//           SizedBox(width: 10),
+//           Text("Transacton Method: $method"),
+//           SizedBox(width: 10),
+//           Text("Account Name: $name"),
+//           SizedBox(width: 10),
+//           Text("Account No/UID: $accountNum"),
+//           SizedBox(width: 10),
+//           SizedBox(width: 10),
+//           Text("Time: $date"),
+//         ],
+//       ),
+//       trailing: Text(
+//         "Amount: $amount",
+//         style: TextStyle(
+//           color: color,
+//           fontWeight: FontWeight.bold,
+//           fontSize: 16,
+//         ),
+//       ),
+//     ),
+//   );
+// }
+
 Widget transactionItem(
   String title,
-  String currency,
-  String method,
-  String accountNum,
+  String billType,
+  String serviceProvider,
   String name,
+  String consumerNo,
   String amount,
   String date,
   Color color,
@@ -336,20 +382,19 @@ Widget transactionItem(
       title: Text(title, style: TextStyle(fontWeight: FontWeight.w600)),
       subtitle: Row(
         children: [
-          Text("Currency: $currency"),
+          Text(billType),
           SizedBox(width: 10),
-          Text("Transacton Method: $method"),
+          Text(serviceProvider),
           SizedBox(width: 10),
-          Text("Account Name: $name"),
+          Text(name),
           SizedBox(width: 10),
-          Text("Account No/UID: $accountNum"),
+          Text(consumerNo),
           SizedBox(width: 10),
-          SizedBox(width: 10),
-          Text("Time: $date"),
+          Text(date),
         ],
       ),
       trailing: Text(
-        "Amount: $amount",
+        amount,
         style: TextStyle(
           color: color,
           fontWeight: FontWeight.bold,
